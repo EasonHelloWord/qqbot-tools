@@ -11,15 +11,18 @@ def post_data():
 
 # 接受消息
 def receive(data):
-    if data.get('message_type') == 'group' and data.get('message')[0] == ".":
+    message_type = data.get('message_type')
+    message = data.get('message')
+    if message_type == 'group' and message.startswith("."):
         data['message'] = data.get('message')[1:]
         tools(data)
-    if data.get('message_type') == 'private':
+    if message_type == 'private':
         tools(data)
 
 # 使用模块
 def tools(data):
-    if data.get('message')[:2] == "一言":# 一言
+    message = data.get('message')
+    if message.startswith("一言"):# 一言
         yiyan_(data)
     # repeat_(data) #复读机 仅用作测试
 
@@ -40,13 +43,15 @@ def repeat_(data):
     send_message(message_type,message,user_id,group_id)
 
 # 发送消息
-def send_message(message_type,message,user_id=None,group_id=None,auto_escape=False):
-    data = {'message_type':message_type,
-            'user_id':user_id,
-            'group_id':group_id,
-            'message':message,
-            'auto_escape':auto_escape}
-    requests.post(f"http://127.0.0.1:5700/send_msg", data)
+def send_message(message_type, message, user_id=None, group_id=None, auto_escape=False):
+    data = {
+        'message_type': message_type,
+        'user_id': user_id,
+        'group_id': group_id,
+        'message': message,
+        'auto_escape': auto_escape
+    }
+    requests.post("http://127.0.0.1:5700/send_msg", data)
 
 # 发送报文
 def post(URL, data):

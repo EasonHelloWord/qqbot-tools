@@ -55,11 +55,11 @@ def EchoCave_(data,method):
     if method == "read":
         msg = EchoCave.readfile()
         if msg:
-            message = "隐约中你听到了一个回声："+msg
+            message = "隐约中你听到了一个回声：\n"+msg
         else: message = "这里还很安静"
     if method == "write":
-        EchoCave.EchoCave(data['message'],data['user_id'])
-        message = "保存成功~\n"
+        mes = EchoCave.EchoCave(data['message'],data['user_id'])
+        message = mes + "\n"
         msg = EchoCave.readfile()
         if msg:
             message += "隐隐中你听到了一个回声：\n"+msg

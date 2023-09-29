@@ -1,6 +1,6 @@
 import requests
 from flask import Flask, request
-from apps import repeat,yiyan
+from apps import repeat,yiyan,EchoCave
 
 app = Flask(__name__)
 
@@ -26,6 +26,12 @@ def tools(data):
     message = data.get('message')
     if message.startswith("一言"):# 一言
         yiyan_(data)
+    if message.startswith("回声洞"):# 回声洞
+        data['message'] = data['message'][3:]
+        EchoCave_(data,'write')
+    if message == "回声":# 回声
+        data['message'] = data['message'][2:]
+        EchoCave_(data,'read')
     # repeat_(data) #复读机 仅用作测试
 
 # 一言
@@ -43,6 +49,26 @@ def repeat_(data):
     user_id = data.get('user_id',None)
     group_id = data.get('group_id',None)
     send_message(message_type,message,user_id,group_id)
+
+#回声洞
+def EchoCave_(data,method):
+    if method == "read":
+        msg = EchoCave.readfile()
+        if msg:
+            message = "隐约中你听到了一个回声："+msg
+        else: message = "这里还很安静"
+    if method == "write":
+        EchoCave.EchoCave(data['message'],data['user_id'])
+        message = "保存成功~\n"
+        msg = EchoCave.readfile()
+        if msg:
+            message += "隐隐中你听到了一个回声：\n"+msg
+        else: message += "这里还很安静"
+    message_type = data.get('message_type')
+    user_id = data.get('user_id',None)
+    group_id = data.get('group_id',None)
+    send_message(message_type,message,user_id,group_id)
+
 
 # 发送消息
 def send_message(message_type, message, user_id=None, group_id=None, auto_escape=False):

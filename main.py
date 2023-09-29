@@ -1,6 +1,6 @@
 import requests
 from flask import Flask, request
-from apps import repeat
+from apps import repeat,yiyan
 app = Flask(__name__)
 @app.route('/', methods=["POST"])
 def post_data():
@@ -17,9 +17,18 @@ def receive(data):
         tools(data)
 
 def tools(data):
-    repeat_(data)
+    if data.get('message')[:2] == "一言":
+        yiyan_(data)
+    # repeat_(data) #复读机 仅用作测试
 
-def repeat_(data):
+def yiyan_(data):
+    message_type = data.get('message_type')
+    message = yiyan.yiyan()
+    user_id = data.get('user_id',None)
+    group_id = data.get('group_id',None)
+    send_message(message_type,message,user_id,group_id)
+
+def repeat_(data):#复读机 仅用作测试
     message = repeat.repeat(data.get('message'))
     message_type = data.get('message_type')
     user_id = data.get('user_id',None)

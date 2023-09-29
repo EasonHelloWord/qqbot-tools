@@ -1,7 +1,9 @@
 import requests
 from flask import Flask, request
 from apps import repeat,yiyan
+
 app = Flask(__name__)
+
 @app.route('/', methods=["POST"])
 def post_data():
     data = request.get_json()

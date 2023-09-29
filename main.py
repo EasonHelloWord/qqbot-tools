@@ -20,7 +20,7 @@ def tools(data):
     repeat_(data)
 
 def repeat_(data):
-    message = repeat.main(data.get('message'))
+    message = repeat.repeat(data.get('message'))
     message_type = data.get('message_type')
     user_id = data.get('user_id',None)
     group_id = data.get('group_id',None)

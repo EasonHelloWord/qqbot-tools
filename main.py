@@ -1,6 +1,6 @@
 import requests
 from flask import Flask, request
-from apps import repeat,yiyan,EchoCave,config
+from apps import repeat,yiyan,EchoCave,config,helps
 
 app = Flask(__name__)
 
@@ -35,6 +35,9 @@ def tools(data):
     if message.startswith("配置"):# 配置
         data['message'] = data['message'][2:]
         config_(data)
+    if message.startswith("帮助"):# 帮助
+        data['message'] = data['message'][2:]
+        helps_(data)
     # repeat_(data) #复读机 仅用作测试
 
 # 一言
@@ -82,8 +85,13 @@ def config_(data):
         
     send_message(data,message)
 
-
-
+def helps_(data):
+    if not data.get("message"):
+        msg = helps.read_all_file()
+        print(msg)
+    else:
+        msg = helps.find_and_read_file(data.get("message"))
+    send_message(data, msg)
 # 发送消息
 def send_message(data, message, auto_escape=False):
     message_type = data.get('message_type')

@@ -1,6 +1,6 @@
 import requests
 from flask import Flask, request
-from apps import repeat,yiyan,EchoCave
+from apps import repeat,yiyan,EchoCave,config
 
 app = Flask(__name__)
 
@@ -32,23 +32,20 @@ def tools(data):
     if message == "回声":# 回声
         data['message'] = data['message'][2:]
         EchoCave_(data,'read')
+    if message.startswith("配置"):# 配置
+        data['message'] = data['message'][2:]
+        config_(data)
     # repeat_(data) #复读机 仅用作测试
 
 # 一言
 def yiyan_(data): 
-    message_type = data.get('message_type')
     message = yiyan.yiyan()
-    user_id = data.get('user_id',None)
-    group_id = data.get('group_id',None)
-    send_message(message_type,message,user_id,group_id)
+    send_message(data,message)
 
 #复读机 仅用作测试
 def repeat_(data): 
     message = repeat.repeat(data.get('message'))
-    message_type = data.get('message_type')
-    user_id = data.get('user_id',None)
-    group_id = data.get('group_id',None)
-    send_message(message_type,message,user_id,group_id)
+    send_message(data,message)
 
 #回声洞
 def EchoCave_(data,method):
@@ -64,14 +61,30 @@ def EchoCave_(data,method):
         if msg:
             message += "隐隐中你听到了一个回声：\n"+msg
         else: message += "这里还很安静"
-    message_type = data.get('message_type')
-    user_id = data.get('user_id',None)
-    group_id = data.get('group_id',None)
-    send_message(message_type,message,user_id,group_id)
+    send_message(data,message)
+
+# 配置
+def config_(data):
+    if not data.get("message"):
+        config_data = config.get_config(data)
+        message = ""
+        for key, value in config_data.items():
+            message += f"{key}: {value}\n"
+        if not message:
+            message = "还没有配置过任何东西哦"
+    else:
+        name_and_detail = data.get("message").split(":")
+        config.set_config(data,name_and_detail[0],name_and_detail[1])
+        message = f"设置成功~'{name_and_detail[0]}'的值为'{name_and_detail[1]}'"
+    send_message(data,message)
+
 
 
 # 发送消息
-def send_message(message_type, message, user_id=None, group_id=None, auto_escape=False):
+def send_message(data, message, auto_escape=False):
+    message_type = data.get('message_type')
+    user_id = data.get('user_id',None)
+    group_id = data.get('group_id',None)
     data = {
         'message_type': message_type,
         'user_id': user_id,

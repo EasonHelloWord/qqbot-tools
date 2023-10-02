@@ -35,10 +35,18 @@ def set_config(data, name, detail):
             data = json.load(f)
     except FileNotFoundError:
         data = {}
-
-    data[name] = detail
+    if not detail:
+        try:
+            del data[name]
+        except:
+            mes = f"未找到配置{name}，他可能已经被删除"
+        else:
+            mes = f"配置{name}已删除"
+    else:
+        data[name] = detail
+        mes = f"设置成功~'{name}'的值为'{detail}'"
 
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
-    return data
+    return mes

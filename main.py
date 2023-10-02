@@ -69,13 +69,17 @@ def config_(data):
         config_data = config.get_config(data)
         message = ""
         for key, value in config_data.items():
-            message += f"{key}: {value}\n"
+            message += f"{key}: {value}"
+            if key != list(config_data.keys())[-1]:
+                message += "\n"
         if not message:
             message = "还没有配置过任何东西哦"
     else:
         name_and_detail = data.get("message").split(":")
-        config.set_config(data,name_and_detail[0],name_and_detail[1])
-        message = f"设置成功~'{name_and_detail[0]}'的值为'{name_and_detail[1]}'"
+        if len(name_and_detail) == 1:
+            name_and_detail[1] = ""
+        message = config.set_config(data,name_and_detail[0],name_and_detail[1])
+        
     send_message(data,message)
 
 

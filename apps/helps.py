@@ -45,7 +45,7 @@ def read_all_file():
     with open("helps/list.json", 'r') as file:
         lists = json.load(file)
     if lists:
-        formatted_string = ""
+        formatted_string = "通过指令 帮助[功能名称] 获取详细信息\n"
         for list_name in lists:
             file_path = os.path.join("helps", f"{list_name}.json")
             if os.path.exists(file_path):

@@ -1,6 +1,5 @@
-import requests
 from flask import Flask, request
-from apps import repeat,yiyan,EchoCave,config,helps
+from apps import repeat,yiyan,EchoCave,config,helps,cqhttp_tools
 
 app = Flask(__name__)
 
@@ -43,12 +42,12 @@ def receive_message(data):
 # 一言
 def yiyan_(data): 
     message = yiyan.yiyan()
-    send_message(data,message)
+    cqhttp_tools.send_message(data,message)
 
 #复读机 仅用作测试
 def repeat_(data): 
     message = repeat.repeat(data.get('message'))
-    send_message(data,message)
+    cqhttp_tools.send_message(data,message)
 
 #回声洞
 def EchoCave_(data,method):
@@ -64,7 +63,7 @@ def EchoCave_(data,method):
         if msg:
             message += "隐隐中你听到了一个回声：\n"+msg
         else: message += "这里还很安静"
-    send_message(data,message)
+    cqhttp_tools.send_message(data,message)
 
 # 配置
 def config_(data):
@@ -83,7 +82,7 @@ def config_(data):
             name_and_detail[1] = ""
         message = config.set_config(data,name_and_detail[0],name_and_detail[1])
         
-    send_message(data,message)
+    cqhttp_tools.send_message(data,message)
 
 def helps_(data):
     if not data.get("message"):
@@ -91,24 +90,10 @@ def helps_(data):
         print(msg)
     else:
         msg = helps.find_and_read_file(data.get("message"))
-    send_message(data, msg)
-# 发送消息
-def send_message(data, message, auto_escape=False):
-    message_type = data.get('message_type')
-    user_id = data.get('user_id',None)
-    group_id = data.get('group_id',None)
-    data = {
-        'message_type': message_type,
-        'user_id': user_id,
-        'group_id': group_id,
-        'message': message,
-        'auto_escape': auto_escape
-    }
-    requests.post("http://127.0.0.1:5700/send_msg", data)
+    cqhttp_tools.send_message(data, msg)
 
-# 发送报文
-def post(URL, data):
-    requests.post(f"http://127.0.0.1:5700/{URL}", data)
+
+
 
 if __name__ == '__main__':
     app.run('127.0.0.1', 5701, True)

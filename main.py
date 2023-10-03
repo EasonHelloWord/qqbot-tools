@@ -7,22 +7,22 @@ app = Flask(__name__)
 @app.route('/', methods=["POST"])
 def post_data():
     data = request.get_json()
-    if data.get('post_type') == 'message':
-        receive(data)
+    receive(data)
     return ('200')
 
 # 接受消息
 def receive(data):
-    message_type = data.get('message_type')
-    message = data.get('message')
-    if message_type == 'group' and message.startswith("."):
-        data['message'] = data.get('message')[1:]
-        tools(data)
-    if message_type == 'private':
-        tools(data)
+    if data.get('post_type') == 'message':
+        message_type = data.get('message_type')
+        message = data.get('message')
+        if message.startswith("."):
+            data['message'] = data.get('message')[1:]
+            receive_message(data)
+        if message_type == 'private':
+            receive_message(data)
 
 # 使用模块
-def tools(data):
+def receive_message(data):
     message = data.get('message')
     if message.startswith("一言"):# 一言
         yiyan_(data)

@@ -1,0 +1,9 @@
+{
+    "name": "【被动】闪照破解",
+    "version": "v1.0.0",
+    "introduction": "用于破解闪照，默认为关",
+    "usage": [
+        "配置ban_flash:[true/false]    启动或关闭闪照破解功能"
+    ],
+    "example": "配置ban_flash:true"
+}

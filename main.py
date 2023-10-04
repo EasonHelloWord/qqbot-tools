@@ -1,5 +1,5 @@
 from flask import Flask, request
-from apps import repeat,yiyan,EchoCave,config,helps,cqhttp_tools
+from apps import repeat,yiyan,EchoCave,config,helps,cqhttp_tools,flash
 
 app = Flask(__name__)
 
@@ -39,7 +39,7 @@ def receive_message(data):
         data['message'] = data['message'][2:]
         helps_(data)
     if "type=flash" in message:# 闪照破解
-        pass
+        flash_(data)
     # repeat_(data) #复读机 仅用作测试
 
 # 一言
@@ -80,13 +80,17 @@ def config_(data):
         if not message:
             message = "还没有配置过任何东西哦"
     else:
-        name_and_detail = data.get("message").split(":")
+        name_and_detail = []
+        for part in data.get("message").split(":"):
+            for x in part.split("："):
+                name_and_detail.append(x)
         if len(name_and_detail) == 1:
-            name_and_detail[1] = ""
+            name_and_detail.append("")
         message = config.set_config(data,name_and_detail[0],name_and_detail[1])
         
     cqhttp_tools.send_message(data,message)
 
+# 帮助文档
 def helps_(data):
     if not data.get("message"):
         msg = helps.read_all_file()
@@ -95,7 +99,12 @@ def helps_(data):
         msg = helps.find_and_read_file(data.get("message"))
     cqhttp_tools.send_message(data, msg)
 
-
+# 闪照
+def flash_(data):
+    message = flash.flash(data)
+    message = f"成功破解[{data.get('sender').get('nickname')}]的闪照：\n{message}"
+    if message:
+        cqhttp_tools.send_message(data,message)
 
 
 if __name__ == '__main__':

@@ -9,6 +9,13 @@ def get_group_member_list(data): # 获取群成员信息
         back = ""
     return back
 
+def get_admin_user_ids(data):
+    if data.get("message_type") == "group":
+        data_back = get_group_member_list(data)
+        admin_user_ids = [entry["user_id"] for entry in data_back["data"] if entry["role"] == "admin"]
+        return admin_user_ids
+    return None
+
 # 发送消息
 def send_message(data, message, auto_escape=False):
     message_type = data.get('message_type')

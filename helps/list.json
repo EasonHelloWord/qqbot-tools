@@ -2,5 +2,6 @@
     "config": ["config", "配置"],
     "EchoCave": ["EchoCave", "回声", "回声洞"],
     "helps": ["help", "helps", "帮助"],
-    "yiyan": ["一言", "yiyan"]
+    "yiyan": ["一言", "yiyan"],
+    "flash": ["flash","闪照"]
 }

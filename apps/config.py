@@ -1,5 +1,6 @@
 import os
 import json
+from apps.cqhttp_tools import get_admin_user_ids
 
 CONFIG_DIR = "configs"  # 将配置目录名更改为英文
 
@@ -26,6 +27,9 @@ def set_config(data, name, detail):
     type = data.get('message_type')
     if type == 'group':
         uid = data.get("group_id")
+        admin_list = get_admin_user_ids(data)
+        if not data.get('user_id') in admin_list:
+            return "权限不足"
     if type == 'private':
         uid = data.get("user_id")
     filename = os.path.join(CONFIG_DIR, f"{type}_{uid}.json")

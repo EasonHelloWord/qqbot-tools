@@ -12,6 +12,7 @@ def post_data():
 # 接受消息
 def receive(data):
     if data.get('post_type') == 'message':
+        print(data)
         message_type = data.get('message_type')
         message = data.get('message')
         if message.startswith("."):
@@ -37,6 +38,8 @@ def receive_message(data):
     if message.startswith("帮助"):# 帮助
         data['message'] = data['message'][2:]
         helps_(data)
+    if "type=flash" in message:# 闪照破解
+        pass
     # repeat_(data) #复读机 仅用作测试
 
 # 一言

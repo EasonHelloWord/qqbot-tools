@@ -1,5 +1,5 @@
 from flask import Flask, request
-from apps import repeat,yiyan,EchoCave,config,helps,cqhttp_tools,flash
+from apps import repeat,yiyan,EchoCave,config,helps,cqhttp_tools,flash,group_recall
 
 app = Flask(__name__)
 
@@ -12,7 +12,7 @@ def post_data():
 # 接受消息
 def receive(data):
     if data.get('post_type') == 'message':
-        print(data)
+        # print(data)
         message_type = data.get('message_type')
         message = data.get('message')
         if message.startswith("."):
@@ -20,6 +20,8 @@ def receive(data):
             receive_message(data)
         if message_type == 'private':
             receive_message(data)
+    if data.get('post_type') == 'notice':
+        receive_notice(data)
 
 # 使用模块
 def receive_message(data):
@@ -42,6 +44,10 @@ def receive_message(data):
         flash_(data)
     # repeat_(data) #复读机 仅用作测试
 
+
+def receive_notice(data):
+    if data.get("notice_type") == 'group_recall':# 群消息撤回
+        group_recall_(data)
 # 一言
 def yiyan_(data): 
     message = yiyan.yiyan()
@@ -94,7 +100,6 @@ def config_(data):
 def helps_(data):
     if not data.get("message"):
         msg = helps.read_all_file()
-        print(msg)
     else:
         msg = helps.find_and_read_file(data.get("message"))
     cqhttp_tools.send_message(data, msg)
@@ -105,6 +110,17 @@ def flash_(data):
     message = f"成功破解[{data.get('sender').get('nickname')}]的闪照：\n{message}"
     if message:
         cqhttp_tools.send_message(data,message)
+
+def group_recall_(data):
+    mes = group_recall.group_recall(data)
+    if mes:
+        data = {
+        'message_type': "group",
+        'user_id': data.get("user_id"),
+        'group_id': data.get("group_id"),
+        }
+        cqhttp_tools.send_message(data,mes[0])
+        cqhttp_tools.send_message(data,mes[1])
 
 
 if __name__ == '__main__':

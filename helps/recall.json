@@ -1,0 +1,9 @@
+{
+    "name": "【被动】撤回破解",
+    "version": "v1.0.0",
+    "introduction": "用于破解撤回消息，默认为关，仅对群聊有效，对机器人的消息永远无效",
+    "usage": [
+        "配置ban_recall:[true/false]    启动或关闭闪照破解功能"
+    ],
+    "example": "配置ban_recall:true"
+}

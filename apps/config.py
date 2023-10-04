@@ -13,14 +13,15 @@ def get_config(data):
         uid = data.get("group_id")
     if type == 'private':
         uid = data.get("user_id")
+    if data.get("notice_type") == "group_recall":
+        type = "group"
+        uid = data.get("group_id")
     filename = os.path.join(CONFIG_DIR, f"{type}_{uid}.json")
-
     try:
         with open(filename, encoding="utf-8") as f:
             data = json.load(f)
     except FileNotFoundError:
         data = {}
-
     return data
 
 def set_config(data, name, detail):

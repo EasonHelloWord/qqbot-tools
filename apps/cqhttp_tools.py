@@ -3,18 +3,30 @@ import requests,json
 def get_group_member_list(data): # 获取群成员信息
     if data.get('message_type') == "group":
         data_send = {"group_id":data.get("group_id")}
-        back = post("get_group_member_list",data_send).text
+        back = post("get_group_member_list",data_send)
         back = json.loads(back)
     else:
         back = ""
     return back
 
-def get_admin_user_ids(data):
+def get_admin_user_ids(data):# 获取管理员列表
     if data.get("message_type") == "group":
         data_back = get_group_member_list(data)
-        admin_user_ids = [entry["user_id"] for entry in data_back["data"] if entry["role"] == "admin"]
+        admin_user_ids = [entry["user_id"] for entry in data_back["data"] if entry["role"] == "admin" or entry["role"] == "owner"]
         return admin_user_ids
     return None
+
+def get_group_member_info(data,user_id=None):# 获取群成员信息
+    if user_id:
+        user_id = user_id
+    else:
+        user_id = data.get('user_id',None)
+    group_id = data.get('group_id',None)
+    datas = {
+        'user_id': user_id,
+        'group_id': group_id,
+    }
+    return json.loads(post("get_group_member_info", datas))
 
 # 发送消息
 def send_message(data, message, auto_escape=False):
@@ -28,12 +40,21 @@ def send_message(data, message, auto_escape=False):
         'message': message,
         'auto_escape': auto_escape
     }
-    return requests.post("http://127.0.0.1:5700/send_msg", data)
+    return post("send_msg", data)
 
+def get_msg(message_id):# 获取消息
+    datas = {
+        'message_id': message_id
+    }
+    return post("get_msg",datas)
+
+def get_login_info():# 获取登录号信息
+    mes = json.loads(post("get_login_info"))
+    return mes
 
 # 发送报文
-def post(URL, data):
-    return requests.post(f"http://127.0.0.1:5700/{URL}", data)
+def post(URL, data=None):
+    return requests.post(f"http://127.0.0.1:5700/{URL}", data).text
 
 
 if __name__ == "__main__":

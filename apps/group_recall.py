@@ -1,7 +1,7 @@
 from apps.cqhttp_tools import get_login_info,get_group_member_info,get_msg
 from apps.config import get_config
 import json
-def group_recall(data):
+def group_recall(data):# 撤回消息破解
     if get_config(data).get("ban_recall",'False').lower() == "true":
         if data.get("user_id") != get_login_info().get('data').get('user_id'):
             if data.get("user_id") == data.get("operator_id"):

@@ -1,4 +1,4 @@
-def repeat(mes):
+def repeat(mes):# 复读机
     return(mes)
 
 if __name__ == "__main__":

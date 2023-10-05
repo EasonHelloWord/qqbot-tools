@@ -20,7 +20,7 @@ for list_name in lists:
     if not os.path.exists(f"helps/{list_name}.json"):
         with open(f"helps/{list_name}.json", "w") as json_file:
             json.dump(example, json_file, ensure_ascii=False,indent=4)
-def find_and_read_file(string):
+def find_and_read_file(string):# 帮助文档细节
     with open("helps/list.json", 'r') as file:
         lists = json.load(file)
 
@@ -41,7 +41,7 @@ def find_and_read_file(string):
                     return formatted_string
     return "暂时没有帮助文档呢"
 
-def read_all_file():
+def read_all_file():# 所有的帮助文档
     with open("helps/list.json", 'r') as file:
         lists = json.load(file)
     if lists:

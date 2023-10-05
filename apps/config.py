@@ -7,7 +7,7 @@ CONFIG_DIR = "configs"  # 将配置目录名更改为英文
 if not os.path.exists(CONFIG_DIR):
     os.mkdir(CONFIG_DIR)
 
-def get_config(data):
+def get_config(data):# 读取配置文件
     type = data.get('message_type')
     if type == 'group':
         uid = data.get("group_id")
@@ -24,7 +24,7 @@ def get_config(data):
         data = {}
     return data
 
-def set_config(data, name, detail):
+def set_config(data, name, detail):# 更新配置文件
     type = data.get('message_type')
     if type == 'group':
         uid = data.get("group_id")

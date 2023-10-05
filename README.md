@@ -7,7 +7,7 @@ go-cqhttp帮助文档链接：[go-cqhttp](https://docs.go-cqhttp.org/)
 配置选择`HTTP通信`  
 QQ号及密码及签名服务器自行配置   
 http设置：  
-```
+```config.yml
 servers:
   # 添加方式，同一连接方式可添加多个，具体配置说明请查看文档
   #- http: # http 通信
@@ -39,7 +39,10 @@ servers:
 或自行在线下载：  
 >[github项目地址](https://github.com/EasonHelloWord/qqbot-tools)  
 >[gitee项目地址](https://gitee.com/easonjan/qqbot-tools)  
-
+首先安装依赖  
+```shell
+pip install -r requirements.txt
+```
 运行main.py即可
 
 ## 2.用户功能：

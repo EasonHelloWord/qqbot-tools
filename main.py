@@ -28,23 +28,30 @@ def receive_message(data):
     message = data.get('message')
     if message.startswith("一言"):# 一言
         yiyan_(data)
+        return ""
     if message.startswith("回声洞"):# 回声洞
         data['message'] = data['message'][3:]
         EchoCave_(data,'write')
+        return ""
     if message == "回声":# 回声
         data['message'] = data['message'][2:]
         EchoCave_(data,'read')
+        return ""
     if message.startswith("配置"):# 配置
         data['message'] = data['message'][2:]
         config_(data)
+        return ""
     if message.startswith("帮助"):# 帮助
         data['message'] = data['message'][2:]
         helps_(data)
+        return ""
     if "type=flash" in message:# 闪照破解
         flash_(data)
+        return ""
     if message.lower().startswith("ai"):# ai
         data['message'] = data['message'][2:]
         threading.Thread(target=ChatGlm_, args=(data,)).start()
+        return ""
     # repeat_(data) #复读机 仅用作测试
 
 
@@ -134,7 +141,7 @@ def ChatGlm_(data):# ai
     cqhttp_tools.send_message(data,mes)
 
 if __name__ == '__main__':
-    enable_ai = True
+    enable_ai = False
     if enable_ai:
         from apps import ChatGLM
     app.run('127.0.0.1', 5701, False)

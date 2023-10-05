@@ -134,7 +134,7 @@ def ChatGlm_(data):# ai
     cqhttp_tools.send_message(data,mes)
 
 if __name__ == '__main__':
-    enable_ai = False
+    enable_ai = True
     if enable_ai:
         from apps import ChatGLM
     app.run('127.0.0.1', 5701, False)

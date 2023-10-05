@@ -4,5 +4,6 @@
     "helps": ["help", "helps", "帮助"],
     "yiyan": ["一言", "yiyan"],
     "flash": ["flash","闪照"],
-    "recall": ["recall","撤回","撤回破解"]
+    "recall": ["recall","撤回","撤回破解"],
+    "ChatGLM": ["ChatGLM","AI","ai"]
 }

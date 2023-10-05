@@ -1,6 +1,6 @@
 from flask import Flask, request
 from apps import repeat,yiyan,EchoCave,config,helps,cqhttp_tools,flash,group_recall
-
+import threading
 app = Flask(__name__)
 
 @app.route('/', methods=["POST"])
@@ -42,6 +42,9 @@ def receive_message(data):
         helps_(data)
     if "type=flash" in message:# 闪照破解
         flash_(data)
+    if message.lower().startswith("ai"):# ai
+        data['message'] = data['message'][2:]
+        threading.Thread(target=ChatGlm_, args=(data,)).start()
     # repeat_(data) #复读机 仅用作测试
 
 
@@ -78,6 +81,8 @@ def EchoCave_(data,method):
 def config_(data):
     if not data.get("message"):
         config_data = config.get_config(data)
+        if config_data.get("ai_temp"):
+            del config_data["ai_temp"]
         message = ""
         for key, value in config_data.items():
             message += f"{key}: {value}"
@@ -122,6 +127,14 @@ def group_recall_(data):
         cqhttp_tools.send_message(data,mes[0])
         cqhttp_tools.send_message(data,mes[1])
 
+def ChatGlm_(data):# ai
+    cqhttp_tools.send_message(data,"机器人性能较弱，回复时间可能较长，请耐心等待。")
+    try:mes = ChatGLM.ChatGlm(data)
+    except:mes = '抛出异常：我的电脑跑不动这个模型啦！（悲）'
+    cqhttp_tools.send_message(data,mes)
 
 if __name__ == '__main__':
-    app.run('127.0.0.1', 5701, True)
+    enable_ai = False
+    if enable_ai:
+        from apps import ChatGLM
+    app.run('127.0.0.1', 5701, False)

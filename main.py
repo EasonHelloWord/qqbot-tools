@@ -20,8 +20,10 @@ def receive(data):
             receive_message(data)
         if message_type == 'private':
             receive_message(data)
+        return ""
     if data.get('post_type') == 'notice':
         receive_notice(data)
+    return ""
 
 # 使用模块
 def receive_message(data):

@@ -18,9 +18,10 @@ def receive(data):
         if message.startswith("."):
             data['message'] = data.get('message')[1:]
             receive_message(data)
+            return ""
         if message_type == 'private':
             receive_message(data)
-        return ""
+            return ""
     if data.get('post_type') == 'notice':
         receive_notice(data)
     return ""

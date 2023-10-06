@@ -122,8 +122,8 @@ def helps_(data):
 # 闪照
 def flash_(data):
     message = flash.flash(data)
-    message = f"成功破解[{data.get('sender').get('nickname')}]的闪照：\n{message}"
     if message:
+        message = f"成功破解[{data.get('sender').get('nickname')}]的闪照：\n{message}"
         cqhttp_tools.send_message(data,message)
 
 def group_recall_(data):
@@ -138,10 +138,12 @@ def group_recall_(data):
         cqhttp_tools.send_message(data,mes[1])
 
 def ChatGlm_(data):# ai
-    cqhttp_tools.send_message(data,"机器人性能较弱，回复时间可能较长，请耐心等待。")
-    try:mes = ChatGLM.ChatGlm(data)
-    except:mes = '抛出异常：我的电脑跑不动这个模型啦！（悲）'
-    cqhttp_tools.send_message(data,mes)
+    if enable_ai:
+        cqhttp_tools.send_message(data,"机器人性能较弱，回复时间可能较长，请耐心等待。")
+        try:mes = ChatGLM.ChatGlm(data)
+        except:mes = '抛出异常：我的电脑跑不动这个模型啦！（悲）'
+        cqhttp_tools.send_message(data,mes)
+    else:cqhttp_tools.send_message(data,"功能未启动")
 
 if __name__ == '__main__':
     enable_ai = False

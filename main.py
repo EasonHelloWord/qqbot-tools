@@ -1,5 +1,4 @@
 from flask import Flask, request
-from apps import repeat,yiyan,EchoCave,config,helps,flash,group_recall
 import threading, os, json
 app = Flask(__name__)
 
@@ -157,7 +156,7 @@ if __name__ == '__main__':
             json.dump(config_data, f, indent=4, ensure_ascii=False)
     except: print("配置文件异常")
 
-    from apps import cqhttp_tools
+    from apps import repeat,yiyan,EchoCave,config,helps,flash,group_recall
 
     if config_data["enable_ai"]:
         from apps import ChatGLM

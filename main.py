@@ -156,7 +156,7 @@ if __name__ == '__main__':
             json.dump(config_data, f, indent=4, ensure_ascii=False)
     except: print("配置文件异常")
 
-    from apps import repeat,yiyan,EchoCave,config,helps,flash,group_recall
+    from apps import repeat,yiyan,EchoCave,config,helps,flash,group_recall,cqhttp_tools
 
     if config_data["enable_ai"]:
         from apps import ChatGLM

@@ -1,6 +1,6 @@
 from flask import Flask, request
 from apps import repeat,yiyan,EchoCave,config,helps,cqhttp_tools,flash,group_recall
-import threading
+import threading, os, json
 app = Flask(__name__)
 
 @app.route('/', methods=["POST"])
@@ -138,7 +138,7 @@ def group_recall_(data):
         cqhttp_tools.send_message(data,mes[1])
 
 def ChatGlm_(data):# ai
-    if enable_ai:
+    if config_data["enable_ai"]:
         cqhttp_tools.send_message(data,"机器人性能较弱，回复时间可能较长，请耐心等待。")
         try:mes = ChatGLM.ChatGlm(data)
         except:mes = '抛出异常：我的电脑跑不动这个模型啦！（悲）'
@@ -146,7 +146,16 @@ def ChatGlm_(data):# ai
     else:cqhttp_tools.send_message(data,"功能未启动")
 
 if __name__ == '__main__':
-    enable_ai = False
-    if enable_ai:
+    # 读取配置文件
+    filename = os.path.join("config.json")
+    try:
+        with open(filename, encoding="utf-8") as f:
+            config_data = json.load(f)
+    except FileNotFoundError:
+        config_data = {"enable_ai":False}
+        with open(filename, 'w', encoding='utf-8') as f:
+            json.dump(config_data, f, indent=4, ensure_ascii=False)
+    except: print("配置文件异常")
+    if config_data["enable_ai"]:
         from apps import ChatGLM
     app.run('127.0.0.1', 5701, False)

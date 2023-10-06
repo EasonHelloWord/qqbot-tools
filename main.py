@@ -23,7 +23,16 @@ def receive(data):
             return ""
     if data.get('post_type') == 'notice':
         receive_notice(data)
+    if data.get('post_type') == 'request':
+        receive_request(data)
     return ""
+
+def receive_request(data):
+    if data.get("request_type") == 'friend':# 加好友
+        return {"approve":True}
+    if data.get("request_type") == 'group':# 群消息撤回
+        if data.get("sub_type") == 'invite':# 群消息撤回
+            return {"approve":True}
 
 # 使用模块
 def receive_message(data):

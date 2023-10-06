@@ -1,5 +1,5 @@
 from flask import Flask, request
-from apps import repeat,yiyan,EchoCave,config,helps,cqhttp_tools,flash,group_recall
+from apps import repeat,yiyan,EchoCave,config,helps,flash,group_recall
 import threading, os, json
 app = Flask(__name__)
 
@@ -152,10 +152,13 @@ if __name__ == '__main__':
         with open(filename, encoding="utf-8") as f:
             config_data = json.load(f)
     except FileNotFoundError:
-        config_data = {"enable_ai":False}
+        config_data = {"enable_ai":False,"runport":5701,"cqhttp_address":"http://127.0.0.1:5700/"}
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(config_data, f, indent=4, ensure_ascii=False)
     except: print("配置文件异常")
+
+    from apps import cqhttp_tools
+
     if config_data["enable_ai"]:
         from apps import ChatGLM
-    app.run('127.0.0.1', 5701, False)
+    app.run('0.0.0.0',config_data["runport"], False)

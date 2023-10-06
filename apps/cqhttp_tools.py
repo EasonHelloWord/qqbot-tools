@@ -1,4 +1,7 @@
-import requests,json
+import requests,json,os
+filename = os.path.join("config.json")
+with open(filename, encoding="utf-8") as f:
+    config_data = json.load(f)
 
 def get_group_member_list(data): # 获取群成员信息
     if data.get('message_type') == "group":
@@ -54,7 +57,7 @@ def get_login_info():# 获取登录号信息
 
 # 发送报文
 def post(URL, data=None):
-    return requests.post(f"http://127.0.0.1:5700/{URL}", data).text
+    return requests.post(f"{config_data['cqhttp_address']}{URL}", data).text
 
 
 if __name__ == "__main__":

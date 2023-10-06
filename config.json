@@ -1,3 +1,5 @@
 {
-    "enable_ai": false
+    "enable_ai": false,
+    "runport": 5701,
+    "cqhttp_address": "http://127.0.0.1:5700/"
 }
